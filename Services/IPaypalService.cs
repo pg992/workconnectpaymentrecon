@@ -8,5 +8,7 @@ namespace PaymentReconciliation.Services
     {
         Task<List<TransactionDetail>> GetTransactionsAsync();
         Task<List<Payments>> CompareAsync(List<TransactionDetail> paypalTransactionDetails, List<Payments> dbPayments);
+
+        void TestOffice365();
     }
 }

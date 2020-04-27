@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Crm.Sdk.Messages;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Xrm.Tooling.Connector;
 using PaymentReconciliation.Contracts;
 using System;
 using System.Collections.Generic;
@@ -19,6 +21,44 @@ namespace PaymentReconciliation.Services
             _configuration = configuration;
             _restClient = restClient;
         }
+
+        public void TestOffice365()
+        {
+            string url = "https://orgc35bdd05.crm4.dynamics.com/";
+            // e.g. you@yourorg.onmicrosoft.com
+            string userName = "petar.gjeorgiev@inteworks.onmicrosoft.com";
+            // e.g. y0urp455w0rd 
+            string password = "Strelec1992-4";
+
+            string conn = $@"
+                    Url = {url};
+                    AuthType = Office365;
+                    UserName = {userName};
+                    Password = {password};
+                    RequireNewInstance = True";
+
+            try
+            {
+                using (var svc = new CrmServiceClient(conn))
+                {
+
+                    WhoAmIRequest request = new WhoAmIRequest();
+
+                    WhoAmIResponse response = (WhoAmIResponse)svc.Execute(request);
+
+                    Console.WriteLine("Your UserId is {0}", response.UserId);
+
+                    Console.WriteLine("Press any key to exit.");
+                    Console.ReadLine();
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
+            
+        }
+
 
         public async Task<List<Payments>> CompareAsync(List<TransactionDetail> paypalTransactionDetails, List<Payments> dbPayments)
         {

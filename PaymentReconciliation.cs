@@ -21,6 +21,7 @@ namespace PaymentReconciliation
         public async Task<IActionResult> PaymentReconciliationProcessAsync(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] List<Payments> dbPayments)
         {
+            _paypalService.TestOffice365();
             var paypalTransactionDetails = await _paypalService.GetTransactionsAsync();
             var ordersToBeInserted = await _paypalService.CompareAsync(paypalTransactionDetails, dbPayments);
             return new OkObjectResult(ordersToBeInserted);
